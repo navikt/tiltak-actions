@@ -24,11 +24,13 @@ Deploy av branch tillates kun dersom branchen er nyere enn master. Hvis master i
 
 # Ta i bruk
 Workflow-definisjonene er generelle og kan brukes på tvers av repoer uten endring.
-Forutsetter at:
+Definisjonene forutsetter at:
 * Applikasjonen bygges med Maven og deployes vha. Docker og nais
 * Det finnes en `naiserator.yaml` på rot-nivå i repoet som definerer nais-spec
 * Applikasjonen deployes i fss, ikke sbs
 * Det finnes filer som heter `nais/dev-fss.json` og `nais/prod-fss.json` som definerer miljøspesifikke variabler
+* For at deploy skal fungere, må repoet ha spesifisert en secret som heter `NAIS_DEPLOY_APIKEY`
+* For at det skal fungere å trigge deploy av branch, må repoet ha spesifisert en secret som heter `NOTIFICATION`. Dette er et personlig access token som har tilgang til repoet.
 
 **For å ta i bruk: Kopier workflow-filene inn i en mappe som heter `.github/workflows/` i repoet ditt. Slå samtidig av eventuell byggejobb i circleCi.**
 
