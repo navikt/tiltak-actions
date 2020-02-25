@@ -14,7 +14,7 @@ Repo som inneholder _Github actions_ workflow-definisjoner. Definisjonene er gen
 
 # Workflows
 Repoet definerer workflows for to hovedflyter
-* Én flyt for _master_ branch, som bygger og deployer automatisk til dev-fss og prod-fss. *Merk at denne vil deploye automatisk til begge miljøer uten noen manuell bekreftelse*
+* Én flyt for _master_ branch, som bygger og deployer automatisk til dev-fss og prod-fss. **Merk at denne vil deploye automatisk til begge miljøer uten noen manuell bekreftelse**
 * For alle andre brancher kjøres diverse byggesteg slik at applikasjonen bygges, og om ønskelig kan deployes vha kommentar på en issue som opprettes i github-repoet. Bygg-stegene blir da
   * Bygg applikasjon, lag image og opprett en issue i repoet som kan brukes for å deploye til dev-miljø _om ønskelig_.
   * Lytt etter kommentarer på issues og trigg en deploy dersom kommentaren har riktig format
@@ -30,5 +30,5 @@ Forutsetter at:
 * Applikasjonen deployes i fss, ikke sbs
 * Det finnes filer som heter `nais/dev-fss.json` og `nais/prod-fss.json` som definerer miljøspesifikke variabler
 
-*For å ta i bruk: Kopier workflow-filene inn i en mappe som heter `.github/workflows/` i repoet ditt. Slå samtidig av eventuell byggejobb i circleCi.
+**For å ta i bruk: Kopier workflow-filene inn i en mappe som heter `.github/workflows/` i repoet ditt. Slå samtidig av eventuell byggejobb i circleCi.**
 
