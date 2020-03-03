@@ -7,13 +7,19 @@ on:
       - '!master'
 
 env:
-  IMAGE_BASE: docker.pkg.github.com/${{ github.repository }}/tiltaksgjennomforing-varsel
-
+  GITHUB_REPOSITORY: ${{ github.repository }}
+ 
 jobs:
   bygg:
     name: Bygg branch og lag deployment-issue
     runs-on: ubuntu-latest
     steps:
+      - name: Finn REPOSITORY_NAME
+        run: echo ::set-env name=REPOSITORY_NAME::$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}')
+
+      - name: Sett IMAGE_BASE
+        run: echo ::set-env name=IMAGE_BASE::$(echo "docker.pkg.github.com/$GITHUB_REPOSITORY/$REPOSITORY_NAME")
+
       - name: Sjekk ut kode
         uses: actions/checkout@v2
         with:

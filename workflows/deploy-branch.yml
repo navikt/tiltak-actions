@@ -2,16 +2,22 @@ name: Deploy til dev
 on:
   repository_dispatch:
     types: [deploy-command]
+
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  IMAGE_BASE: docker.pkg.github.com/${{ github.repository }}/tiltaksgjennomforing-varsel
-      
+  GITHUB_REPOSITORY: ${{ github.repository }}
+ 
 jobs:
   deploy-branch:
     name: Deploy til dev
     runs-on: ubuntu-latest
     
     steps:
+      - name: Finn REPOSITORY_NAME
+        run: echo ::set-env name=REPOSITORY_NAME::$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}')
+
+      - name: Sett IMAGE_BASE
+        run: echo ::set-env name=IMAGE_BASE::$(echo "docker.pkg.github.com/$GITHUB_REPOSITORY/$REPOSITORY_NAME")
+
       - name: Kommenterer med link til action
         uses: actions/github-script@0.5.0
         with:
@@ -21,7 +27,7 @@ jobs:
               issue_number: ${{ github.event.client_payload.github.payload.issue.number }},
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Deploy satt i gang: https://github.com/navikt/tiltaksgjennomforing-varsel/actions/runs/${{ github.run_id }}'
+              body: 'Deploy satt i gang: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
             })
 
       - name: Sjekk ut kode

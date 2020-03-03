@@ -7,14 +7,22 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  IMAGE_BASE: docker.pkg.github.com/${{ github.repository }}/tiltaksgjennomforing-varsel
-  IMAGE: docker.pkg.github.com/${{ github.repository }}/tiltaksgjennomforing-varsel:${{ github.sha }}
-
+  GITHUB_REPOSITORY: ${{ github.repository }}
+ 
 jobs:
   bygg:
     name: Bygg
     runs-on: ubuntu-latest
     steps:
+      - name: Finn REPOSITORY_NAME
+        run: echo ::set-env name=REPOSITORY_NAME::$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}')
+
+      - name: Sett IMAGE_BASE
+        run: echo ::set-env name=IMAGE_BASE::$(echo "docker.pkg.github.com/$GITHUB_REPOSITORY/$REPOSITORY_NAME")
+
+      - name: Sett IMAGE
+        run: echo ::set-env name=IMAGE::$(echo "$IMAGE_BASE:${{ github.sha }}")
+
       - name: Lukk deployment-issues
         uses: actions/github-script@0.5.0
         with:
@@ -66,6 +74,15 @@ jobs:
     runs-on: ubuntu-latest
     needs: bygg
     steps:
+      - name: Finn REPOSITORY_NAME
+        run: echo ::set-env name=REPOSITORY_NAME::$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}')
+
+      - name: Sett IMAGE_BASE
+        run: echo ::set-env name=IMAGE_BASE::$(echo "docker.pkg.github.com/$GITHUB_REPOSITORY/$REPOSITORY_NAME")
+
+      - name: Sett IMAGE
+        run: echo ::set-env name=IMAGE::$(echo "$IMAGE_BASE:${{ github.sha }}")
+
       - name: Sjekk ut kode
         uses: actions/checkout@v2
 
@@ -83,6 +100,15 @@ jobs:
     runs-on: ubuntu-latest
     needs: deploy-dev
     steps:
+      - name: Finn REPOSITORY_NAME
+        run: echo ::set-env name=REPOSITORY_NAME::$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}')
+
+      - name: Sett IMAGE_BASE
+        run: echo ::set-env name=IMAGE_BASE::$(echo "docker.pkg.github.com/$GITHUB_REPOSITORY/$REPOSITORY_NAME")
+
+      - name: Sett IMAGE
+        run: echo ::set-env name=IMAGE::$(echo "$IMAGE_BASE:${{ github.sha }}")
+
       - name: Sjekk ut kode
         uses: actions/checkout@v2
 
